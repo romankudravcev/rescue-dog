@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+@import 'tailwindcss';
+
+/* Custom Colors */
+@theme {
+  --color-primary: #588157;
+  --color-primary-500: #476747;
+  --color-background: #f9f9f7;
+}
+
+:root {
+  --brush: url('/brush.svg');
+}
+
+/* Apply the brush background to specific elements */
+.textmarker {
+  display: inline-block; /* Ensures the background fits the text */
+  background: var(--brush) no-repeat;
+  background-size: contain; /* Ensure the background image scales properly */
+  background-position: center; /* Center the background image */
+  padding: 0.5rem 1.5rem; /* Add padding for more visibility */
+}
+
+/* Base styles */
+html {
+  font-family: 'Lato', sans-serif;
+  background: var(--color-background);
+}
+
+h1 {
+  @apply text-4xl
+    font-bold;
+}
+
+h3 {
+  @apply text-2xl
+    font-bold;
+}
+
+a {
+  @apply font-light
+    hover:underline
+    hover:duration-150
+    hover:text-primary;
+}
+
+.nav-link {
+  @apply hover:no-underline
+    hover:text-white;
+}
+
+button {
+  @apply px-4 py-2
+    bg-primary
+    text-white
+    border-2
+    border-primary
+    rounded-md
+    hover:bg-[#4a6d49]
+    transition-colors
+    duration-300
+    focus:outline-2
+    focus:outline-offset-2
+    focus:outline-primary-500;
+}
+
+.btn-outline {
+  @apply px-4 py-2
+    bg-transparent
+    text-primary
+    border-2
+    border-primary
+    rounded-md
+    hover:bg-primary
+    hover:text-white
+    transition-colors
+    duration-300
+    focus:outline-2
+    focus:outline-offset-2
+    focus:outline-primary-500;
+}
