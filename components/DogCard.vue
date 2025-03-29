@@ -4,7 +4,7 @@
     class="link-reset text-inherit bg-orange-50 border-1 border-orange-200 h-[450px] w-[300px] rounded-4xl cursor-pointer transition-transform transition-filter duration-300 hover:scale-105 hover:brightness-95"
   >
     <img
-      :src="dog.photoUrl"
+      :src="dog.previewPhotoUrl"
       class="rounded-t-4xl h-3/5 w-full object-cover object-center"
       :alt="dog.name"
     />

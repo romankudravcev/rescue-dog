@@ -1,6 +1,6 @@
 <template>
   <img
-    :src="dog?.photoUrl"
+    :src="dog?.previewPhotoUrl"
     class="rounded-t-4xl h-3/5 w-full object-cover object-center"
     :alt="dog?.name"
   />
