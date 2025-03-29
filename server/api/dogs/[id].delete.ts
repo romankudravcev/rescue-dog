@@ -1,5 +1,6 @@
 import { defineEventHandler } from "h3";
-import dogService from "~/server/services/dogService";
+import { tables, useDrizzle } from "~/server/utils/database";
+import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const params = event.context.params as Record<string, string> | undefined;
@@ -13,16 +14,22 @@ export default defineEventHandler(async (event) => {
   const { id } = params;
 
   try {
-    await dogService.deleteDog(id);
-    return { success: true };
-  } catch (error) {
-    if ((error as Error).message === "Dog not found") {
+    const db = useDrizzle();
+    const deleteResult = await db
+      .delete()
+      .from(tables.dogs)
+      .where(eq(tables.dogs.id, Number(id)));
+
+    if (deleteResult.rowCount === 0) {
       return {
         error: "Dog not found",
       };
     }
+
+    return { success: true };
+  } catch (error) {
     return {
-      error: "Error deleting dogs",
+      error: "Error deleting dog",
       details: (error as Error).message,
     };
   }
