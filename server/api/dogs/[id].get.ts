@@ -1,6 +1,7 @@
 import { defineEventHandler } from "h3";
-import dogService from "../../services/dogService";
-import { DogExtended } from "../../models/dog";
+import { mapToDogExtended } from "../../models/dog";
+import { tables } from "~/server/utils/database";
+import { eq } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {
   const params = event.context.params as Record<string, string> | undefined;
@@ -14,8 +15,27 @@ export default defineEventHandler(async (event) => {
   const { id } = params;
 
   try {
-    const dog: DogExtended = await dogService.getDogById(id);
-    return dog;
+    const db = useDrizzle();
+    const dogArray = await db
+      .select()
+      .from(tables.dogs)
+      .where(eq(tables.dogs.id, Number(id)))
+      .limit(1);
+
+    if (dogArray.length === 0) {
+      return {
+        error: "Dog not found",
+      };
+    }
+
+    const dog = dogArray[0];
+
+    const photos = await db
+      .select()
+      .from(tables.photos)
+      .where(eq(tables.photos.dogId, Number(id)));
+
+    return mapToDogExtended(dog, photos);
   } catch (error) {
     if ((error as Error).message === "Dog not found") {
       return {

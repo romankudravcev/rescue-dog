@@ -1,19 +1,14 @@
-import { defineEventHandler, getQuery } from "h3";
-import dogService from "../../services/dogService";
-import { DogPreview } from "../../models/dog";
+import { defineEventHandler } from "h3";
+import { mapToDogPreview } from "../../models/dog";
+import { dogs } from "~/server/database/schema";
 
-export default defineEventHandler(async (event) => {
-  const { breed, isAdopted } = getQuery(event);
-  const filters: { breed?: string; isAdopted?: boolean } = {};
-
-  if (breed) filters.breed = breed as string;
-  if (isAdopted !== undefined) {
-    filters.isAdopted = isAdopted === "true";
-  }
-
+export default defineEventHandler(async () => {
   try {
-    const dogs: DogPreview[] = await dogService.getAllDogs(filters);
-    return dogs;
+    const db = useDrizzle();
+    const result = await db.select().from(dogs).all();
+    return result.map((dog) => {
+      return mapToDogPreview(dog);
+    });
   } catch (error) {
     return {
       error: "Error fetching dogs",
